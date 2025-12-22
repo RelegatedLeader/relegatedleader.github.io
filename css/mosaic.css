@@ -3,7 +3,7 @@ div.mosaic-block {
   position: relative;
   overflow: hidden;
   width: 30%;
-  aspect-ratio: 1;
+  aspect-ratio: 1.25;
   margin: 1.3%;
 }
 
