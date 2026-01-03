@@ -50,17 +50,18 @@ $(document).ready(function() {
 
     // stolen scroll functionality
      $.fn.moveIt = function(){
-        var $window = $(window);
         var instances = [];
+        var contentArea = $('.content');
         
         $(this).each(function(){
             instances.push(new moveItItem($(this)));
         });
-        window.onscroll = function(){
-        var scrollTop = $window.scrollTop();
-        var height = $(document).height();
+        
+        contentArea.on('scroll', function(){
+        var scrollTop = contentArea.scrollTop();
+        var contentHeight = contentArea[0].scrollHeight;
 
-        var calc = 1 - (3*scrollTop/height);
+        var calc = 1 - (3*scrollTop/contentHeight);
         if(calc +0.4 < percent){
            title.addClass('smaller');    
         }else if(calc >= percent){
@@ -78,6 +79,7 @@ $(document).ready(function() {
             inst.update(scrollTop);
             });
           }
+        );
         }
         
     var moveItItem = function(el){
@@ -98,18 +100,7 @@ $(document).ready(function() {
 });
 
 var updateHeight = function(){
-    // TODO: fix height calculations
-
-    // Loop through elements children to find & set the biggest height
-    // $(".wrapper div").each(function(){
-    // // If this elements height is bigger than the biggestHeight
-    //     console.log($(this));
-    //     console.log($(this).height());
-    //     biggestHeight += $(this).height();
-    // });
-
-    // Set the container height
-    $(".wrapper").height(1750);
+    // No longer needed with flexbox layout
 }
 
 window.mobilecheck = function() {
