@@ -1,0 +1,30 @@
+# Test API Endpoints
+
+## Health Check
+GET http://localhost:5000/api/health
+
+### Request Verification
+POST http://localhost:5000/api/auth/request-verification
+Content-Type: application/json
+
+{
+  "contactInfo": "test@example.com",
+  "type": "email"
+}
+
+### Verify Code
+POST http://localhost:5000/api/auth/verify-code
+Content-Type: application/json
+
+{
+  "requestId": "req_test",
+  "code": "123456"
+}
+
+### Check Access
+POST http://localhost:5000/api/access/check
+Content-Type: application/json
+
+{
+  "sessionId": "session_test"
+}

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Portfolio Access Control</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+
+      .stat-card h3 {
+        color: #666;
+        font-size: 0.9em;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .stat-card .value {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .section {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        margin-bottom: 30px;
+      }
+
+      .section h2 {
+        color: #333;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #667eea;
+      }
+
+      .request-item {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border-left: 4px solid #667eea;
+      }
+
+      .request-item p {
+        margin: 5px 0;
+        color: #555;
+      }
+
+      .request-item strong {
+        color: #333;
+      }
+
+      .location-badge {
+        display: inline-block;
+        background: #667eea;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        margin: 5px 0;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      button {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+      }
+
+      .approve-btn {
+        background: #10b981;
+        color: white;
+        flex: 1;
+      }
+
+      .approve-btn:hover {
+        background: #059669;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+      }
+
+      .reject-btn {
+        background: #ef4444;
+        color: white;
+        flex: 1;
+      }
+
+      .reject-btn:hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+      }
+
+      .access-log {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th {
+        background: #667eea;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      tr:hover {
+        background: #f8f9fa;
+      }
+
+      .status-badge {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: bold;
+      }
+
+      .status-active {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      .status-expired {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .loading {
+        text-align: center;
+        color: #666;
+        padding: 20px;
+      }
+
+      .error {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #ef4444;
+      }
+
+      .success {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #10b981;
+      }
+
+      @media (max-width: 768px) {
+        .dashboard {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .header h1 {
+          font-size: 1.8em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🔐 Admin Dashboard</h1>
+        <p>Portfolio Access Control System</p>
+      </div>
+
+      <div class="dashboard" id="dashboardStats">
+        <div class="stat-card">
+          <h3>Total Requests</h3>
+          <div class="value" id="totalRequests">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Active Users</h3>
+          <div class="value" id="activeUsers">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Total Access Events</h3>
+          <div class="value" id="totalAccessEvents">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Unique IPs</h3>
+          <div class="value" id="uniqueIPs">0</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>📋 Pending Approvals</h2>
+        <div id="pendingApprovals" class="loading">
+          Loading pending requests...
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>📊 Access Logs</h2>
+        <div id="accessLogs" class="loading">Loading access logs...</div>
+      </div>
+    </div>
+
+    <script>
+      const API_URL = "http://localhost:5000/api";
+      const ADMIN_KEY =
+        localStorage.getItem("adminKey") || prompt("Enter admin key:");
+
+      if (ADMIN_KEY) {
+        localStorage.setItem("adminKey", ADMIN_KEY);
+        loadDashboard();
+      }
+
+      async function loadDashboard() {
+        try {
+          // Load stats
+          const statsRes = await fetch(`${API_URL}/admin/stats`, {
+            headers: { "x-admin-key": ADMIN_KEY },
+          });
+          const statsData = await statsRes.json();
+
+          if (statsData.success) {
+            document.getElementById("totalRequests").textContent =
+              statsData.stats.totalRequests;
+            document.getElementById("activeUsers").textContent =
+              statsData.stats.activeUsers;
+            document.getElementById("totalAccessEvents").textContent =
+              statsData.stats.totalAccessEvents;
+            document.getElementById("uniqueIPs").textContent =
+              statsData.stats.uniqueIPs;
+          }
+
+          // Load pending approvals
+          const approvalsRes = await fetch(
+            `${API_URL}/admin/pending-approvals`,
+            {
+              headers: { "x-admin-key": ADMIN_KEY },
+            }
+          );
+          const approvalsData = await approvalsRes.json();
+
+          if (approvalsData.success) {
+            displayPendingApprovals(approvalsData.approvals);
+          }
+
+          // Load access logs
+          const logsRes = await fetch(`${API_URL}/admin/access-logs`, {
+            headers: { "x-admin-key": ADMIN_KEY },
+          });
+          const logsData = await logsRes.json();
+
+          if (logsData.success) {
+            displayAccessLogs(logsData.logs);
+          }
+        } catch (error) {
+          console.error("Error loading dashboard:", error);
+          document.getElementById(
+            "pendingApprovals"
+          ).innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
+        }
+      }
+
+      function displayPendingApprovals(approvals) {
+        const container = document.getElementById("pendingApprovals");
+
+        if (approvals.length === 0) {
+          container.innerHTML = "<p>No pending approvals</p>";
+          return;
+        }
+
+        let html = "";
+        approvals.forEach((approval) => {
+          html += `
+                    <div class="request-item">
+                        <p><strong>Contact:</strong> ${approval.contactInfo}</p>
+                        <p><strong>Type:</strong> ${
+                          approval.type === "email" ? "📧 Email" : "📱 Phone"
+                        }</p>
+                        <span class="location-badge">📍 ${
+                          approval.location.city
+                        }, ${approval.location.country}</span>
+                        <p><strong>IP:</strong> ${approval.ip}</p>
+                        <p><strong>Requested:</strong> ${new Date(
+                          approval.verifiedAt
+                        ).toLocaleString()}</p>
+                        <div class="button-group">
+                            <button class="approve-btn" onclick="approveRequest('${
+                              approval.id
+                            }')">✓ Approve</button>
+                            <button class="reject-btn" onclick="rejectRequest('${
+                              approval.id
+                            }')">✗ Reject</button>
+                        </div>
+                    </div>
+                `;
+        });
+
+        container.innerHTML = html;
+      }
+
+      function displayAccessLogs(logs) {
+        const container = document.getElementById("accessLogs");
+
+        if (logs.length === 0) {
+          container.innerHTML = "<p>No access logs</p>";
+          return;
+        }
+
+        let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Contact</th>
+                            <th>Status</th>
+                            <th>Approved</th>
+                            <th>Expires</th>
+                            <th>Personal Info</th>
+                            <th>Access Events</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+        logs.forEach((log) => {
+          const isActive = log.active && new Date(log.expiresAt) > new Date();
+          const status = isActive ? "Active" : "Expired";
+          const statusClass = isActive ? "status-active" : "status-expired";
+          const personalInfo = log.personalInfo
+            ? `${log.personalInfo.firstName} ${log.personalInfo.lastName} (${log.personalInfo.age})`
+            : "Not provided";
+          const accessEvents = log.usageLog ? log.usageLog.length : 0;
+
+          html += `
+                    <tr>
+                        <td>${log.contactInfo}</td>
+                        <td><span class="status-badge ${statusClass}">${status}</span></td>
+                        <td>${new Date(log.approvedAt).toLocaleString()}</td>
+                        <td>${new Date(log.expiresAt).toLocaleString()}</td>
+                        <td>${personalInfo}</td>
+                        <td>${accessEvents}</td>
+                    </tr>
+                `;
+        });
+
+        html += "</tbody></table>";
+        container.innerHTML = html;
+      }
+
+      async function approveRequest(requestId) {
+        try {
+          const res = await fetch(`${API_URL}/admin/approve`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-admin-key": ADMIN_KEY,
+            },
+            body: JSON.stringify({ requestId }),
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            alert(
+              "✓ Request approved! User can now access the portfolio for 20 minutes."
+            );
+            loadDashboard();
+          } else {
+            alert("Error: " + data.message);
+          }
+        } catch (error) {
+          alert("Error approving request: " + error.message);
+        }
+      }
+
+      async function rejectRequest(requestId) {
+        const reason = prompt("Enter rejection reason (optional):");
+
+        try {
+          const res = await fetch(`${API_URL}/admin/reject`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-admin-key": ADMIN_KEY,
+            },
+            body: JSON.stringify({ requestId, reason }),
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            alert("✗ Request rejected.");
+            loadDashboard();
+          } else {
+            alert("Error: " + data.message);
+          }
+        } catch (error) {
+          alert("Error rejecting request: " + error.message);
+        }
+      }
+
+      // Refresh dashboard every 10 seconds
+      setInterval(loadDashboard, 10000);
+    </script>
+  </body>
+</html>
