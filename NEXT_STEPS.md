@@ -1,6 +1,7 @@
 # 🚀 READY TO GO - Follow These Steps
 
 ## ✅ COMPLETED:
+
 - Firebase Project Created: `personal-site-auth`
 - Firebase Console opened in your browser
 
@@ -11,11 +12,13 @@
 ### 1️⃣ Generate Your Firebase Private Key
 
 In your browser (Firebase Console should be open):
+
 1. Look for the blue **"Generate New Private Key"** button
 2. Click it
 3. A JSON file will download to: `C:\Users\frank\Downloads\`
 
 **The file will be named something like:**
+
 - `personal-site-auth-XXXXX.json`
 
 ### 2️⃣ Run The Setup Script
@@ -32,11 +35,12 @@ cd C:\Users\frank\Desktop\relegatedleader.github.io
 ✅ Extracts all Firebase credentials  
 ✅ Creates your `.env` file  
 ✅ Generates encryption keys  
-✅ Backs up your key file  
+✅ Backs up your key file
 
 ### 3️⃣ Add Twilio SMS Credentials
 
 **Sign up for Twilio:**
+
 1. Go to: https://www.twilio.com
 2. Sign up (free)
 3. On dashboard, copy:
@@ -45,6 +49,7 @@ cd C:\Users\frank\Desktop\relegatedleader.github.io
    - Buy a phone number (or use trial)
 
 **Add to `.env`:**
+
 ```
 TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxx
 TWILIO_AUTH_TOKEN=your_token_here
@@ -54,6 +59,7 @@ TWILIO_PHONE_NUMBER=+1234567890
 ### 4️⃣ Add Gmail App Password
 
 **Create app password:**
+
 1. Go to: https://myaccount.google.com/security
 2. Enable 2-Step Verification (if not done)
 3. Go to Security → App passwords
@@ -61,6 +67,7 @@ TWILIO_PHONE_NUMBER=+1234567890
 5. Copy the 16-character password
 
 **Add to `.env`:**
+
 ```
 EMAIL_PASSWORD=xxxx xxxx xxxx xxxx
 ```
@@ -73,6 +80,7 @@ node init-firestore.js
 ```
 
 Should show:
+
 ```
 ✅ Connected to Firebase Firestore
 ✅ verification_requests collection created
@@ -89,6 +97,7 @@ npm start
 ```
 
 Should show:
+
 ```
 ✅ Firebase Firestore initialized successfully
 ✅ Server running on http://localhost:5000
@@ -98,11 +107,13 @@ Should show:
 ### 7️⃣ Test It!
 
 In another PowerShell window:
+
 ```powershell
 Invoke-RestMethod -Uri "http://localhost:5000/api/health" -Method GET
 ```
 
 Should return:
+
 ```
 status
 ------
@@ -132,7 +143,7 @@ firebase-key-backup.json   ← Backup of credentials
 ✅ **SMS Notifications** - Via Twilio  
 ✅ **Encryption** - AES-256-CBC  
 ✅ **Admin Dashboard** - Real-time monitoring  
-✅ **Production Ready** - No mock data  
+✅ **Production Ready** - No mock data
 
 ---
 
@@ -178,6 +189,7 @@ firebase-key-backup.json   ← Backup of credentials
 ## 📱 Need Help?
 
 Check these files:
+
 - `GET_FIREBASE_CREDENTIALS.md` - Firebase help
 - `FIREBASE_COMPLETE_SETUP.md` - Detailed guide
 - `backend/README.md` - API documentation
@@ -187,9 +199,11 @@ Check these files:
 ## 🎉 Ready?
 
 ### Step 1: Download your Firebase key
+
 👉 **Click "Generate New Private Key" in the browser now!**
 
 ### Step 2: Run the setup script
+
 ```powershell
 .\setup-env-from-firebase.ps1
 ```

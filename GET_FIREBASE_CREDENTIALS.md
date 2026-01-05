@@ -3,6 +3,7 @@
 Your Firebase project has been created! Now we need to get the service account credentials.
 
 ## Project Details
+
 - **Project ID**: `personal-site-auth`
 - **Project Name**: Personal Site Auth
 - **Console URL**: https://console.firebase.google.com/project/personal-site-auth/overview
@@ -10,6 +11,7 @@ Your Firebase project has been created! Now we need to get the service account c
 ## Get Your Service Account Key (3 steps):
 
 ### Step 1: Go to Project Settings
+
 1. Open: https://console.firebase.google.com/project/personal-site-auth/settings/serviceaccounts/adminsdk
 2. Or manually:
    - Go to https://console.firebase.google.com
@@ -18,16 +20,19 @@ Your Firebase project has been created! Now we need to get the service account c
    - Go to "Service Accounts" tab
 
 ### Step 2: Generate Private Key
+
 1. Click the blue "Generate New Private Key" button
 2. A JSON file will download automatically
 3. Save it somewhere safe (we'll use it next)
 
 ### Step 3: Copy the JSON Content
+
 1. Open the downloaded JSON file in a text editor
 2. Copy the ENTIRE contents
 3. We'll paste it into the .env file next
 
 ## Your Service Account JSON will look like this:
+
 ```json
 {
   "type": "service_account",
@@ -44,6 +49,7 @@ Your Firebase project has been created! Now we need to get the service account c
 ```
 
 ## Next Steps:
+
 1. Go get your service account JSON from Firebase Console
 2. Come back and we'll fill in your .env file
 3. Start the server!

@@ -9,11 +9,12 @@ This guide will help you set up a complete Firebase project for the portfolio au
 ## 📋 Prerequisites
 
 - [x] Node.js v14+ installed
-- [x] npm installed  
+- [x] npm installed
 - [x] Firebase CLI installed (`firebase-tools`)
 - [x] Google Account for Firebase
 
 **To verify Firebase CLI is installed:**
+
 ```powershell
 firebase --version
 ```
@@ -29,11 +30,13 @@ firebase login
 ```
 
 This will:
+
 1. Open your browser automatically
 2. Ask you to sign in with your Google account
 3. Grant Firebase CLI permission to manage your projects
 
 **After login**, you'll see:
+
 ```
 ✔ Logged in as: your-email@gmail.com
 ```
@@ -52,6 +55,7 @@ This will:
 6. Wait for project to initialize
 
 **After creation, you'll see:**
+
 - Project ID (e.g., `portfolio-auth-system-abc123`)
 - Project dashboard
 
@@ -91,6 +95,7 @@ This is the KEY to connecting your backend to Firebase.
 6. **Important**: Save this JSON file safely (you'll need it immediately)
 
 **The JSON file will look like:**
+
 ```json
 {
   "type": "service_account",
@@ -161,17 +166,20 @@ ADMIN_SECRET_KEY=your_64_byte_hex_key
 ### Important Notes:
 
 **For FIREBASE_PRIVATE_KEY:**
+
 - Copy the entire private key from JSON (including newlines)
 - Wrap it in quotes: `"-----BEGIN...-----END-----\n"`
 - The `\n` characters are literal (not actual newlines)
 
 **For EMAIL_PASSWORD (Gmail):**
+
 1. Enable 2-Step Verification in Google Account
 2. Generate "App Password" for Gmail
 3. Use that 16-character password
 
 **For Encryption Keys:**
 Generate in Node.js:
+
 ```powershell
 node -e "console.log('ENCRYPTION_KEY=' + require('crypto').randomBytes(32).toString('hex'))"
 node -e "console.log('ADMIN_SECRET_KEY=' + require('crypto').randomBytes(64).toString('hex'))"
@@ -207,6 +215,7 @@ node init-firestore.js
 ```
 
 **Expected output:**
+
 ```
 ✅ Connected to Firebase Firestore
 📝 Creating collections...
@@ -228,6 +237,7 @@ npm start
 ```
 
 **Expected output:**
+
 ```
 ✅ Firebase Firestore initialized successfully
 ✅ Server running on http://localhost:5000
@@ -241,19 +251,24 @@ If you see `✅ Firebase Firestore initialized successfully`, **your setup is co
 ## 🔧 Troubleshooting
 
 ### Error: "Service account object must contain a string private_key property"
+
 - **Fix**: Make sure `FIREBASE_PRIVATE_KEY` is wrapped in quotes with literal `\n` characters
 
 ### Error: "PERMISSION_DENIED: Missing or insufficient permissions"
+
 - **Fix**: Make sure Firestore is enabled in Firebase Console
 - Make sure you're using the correct service account
 
 ### Error: "Cannot find module 'firebase-admin'"
+
 - **Fix**: Run `npm install` in the backend directory
 
 ### Error: "TWILIO_ACCOUNT_SID is missing"
+
 - **Fix**: Add Twilio credentials to `.env` file
 
 ### Error: "Email service not configured"
+
 - **Fix**: Add email credentials to `.env` file
 
 ---
@@ -263,11 +278,13 @@ If you see `✅ Firebase Firestore initialized successfully`, **your setup is co
 After starting the server, test each endpoint:
 
 ### Health Check:
+
 ```powershell
 Invoke-RestMethod -Uri "http://localhost:5000/api/health" -Method GET
 ```
 
 ### Request Verification (Email):
+
 ```powershell
 $body = @{
   contactInfo = "test@example.com"
@@ -292,7 +309,7 @@ Your Firebase setup now includes:
 ✅ **Email Notifications** - Via Gmail  
 ✅ **SMS Notifications** - Via Twilio  
 ✅ **Encryption** - AES-256-CBC for sensitive data  
-✅ **Admin Dashboard** - Real-time monitoring  
+✅ **Admin Dashboard** - Real-time monitoring
 
 ---
 

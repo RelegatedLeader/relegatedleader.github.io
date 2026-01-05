@@ -5,18 +5,22 @@ This script will guide you through setting up Firebase with the CLI.
 ## Steps:
 
 1. **Login to Firebase**
+
    ```
    firebase login
    ```
+
    This will open your browser to authenticate with Google.
 
 2. **Create New Firebase Project**
+
    ```
    firebase projects:create portfolio-auth-system
    ```
 
 3. **Add Firestore Database**
    After creating the project, enable Firestore in the Firebase Console:
+
    - Go to https://console.firebase.google.com
    - Select your project
    - Go to Firestore Database
@@ -25,6 +29,7 @@ This script will guide you through setting up Firebase with the CLI.
    - Start in "Production mode"
 
 4. **Get Service Account Credentials**
+
    - Go to Project Settings
    - Service Accounts tab
    - Click "Generate New Private Key"
@@ -32,6 +37,7 @@ This script will guide you through setting up Firebase with the CLI.
 
 5. **Update .env File**
    Copy the JSON contents into your .env:
+
    ```
    FIREBASE_PROJECT_ID=<project_id>
    FIREBASE_PRIVATE_KEY_ID=<private_key_id>
