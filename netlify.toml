@@ -1,0 +1,19 @@
+[build]
+  command = "echo 'Static site with serverless functions'"
+  publish = "."
+  functions = "netlify/functions"
+
+[dev]
+  command = "npm start --prefix backend"
+  port = 5000
+
+# Environment settings
+[context.production]
+  environment = { NODE_ENV = "production" }
+
+[context.development]
+  environment = { NODE_ENV = "development" }
+
+# Build settings
+[build.environment]
+  NODE_VERSION = "20.9.0"
