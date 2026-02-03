@@ -18,7 +18,13 @@ exports.handler = async (event) => {
     // Support both parameter naming conventions
     const code = body.code;
     const contact = body.contact;
-    const contactMethod = body.contactMethod || (body.contact ? (body.contact.includes("@") ? "email" : "sms") : "unknown");
+    const contactMethod =
+      body.contactMethod ||
+      (body.contact
+        ? body.contact.includes("@")
+          ? "email"
+          : "sms"
+        : "unknown");
     const siteId = body.site || body.siteId || "unknown";
 
     if (!code || code.length !== 6 || !/^\d+$/.test(code)) {

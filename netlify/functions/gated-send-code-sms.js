@@ -16,7 +16,7 @@ exports.handler = async (event) => {
   try {
     // Check environment variables
     if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN || !process.env.TWILIO_PHONE_NUMBER) {
-      console.error("Missing Twilio credentials in environment");
+      console.error("❌ Missing Twilio credentials");
       return {
         statusCode: 500,
         headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
@@ -35,18 +35,15 @@ exports.handler = async (event) => {
       };
     }
 
-    // Initialize Twilio client
-    const client = twilio(
-      process.env.TWILIO_ACCOUNT_SID,
-      process.env.TWILIO_AUTH_TOKEN
-    );
+    // Initialize Twilio client inside handler
+    const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
     // Generate 6-digit code
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const siteId = site || "unknown";
 
-    // Format phone number for Twilio (add + if not present)
-    let formattedPhone = phone.startsWith("+") ? phone : "+1" + phone.replace(/\D/g, "");
+    // Format phone number
+    const formattedPhone = phone.startsWith("+") ? phone : "+1" + phone.replace(/\D/g, "");
 
     // Send SMS
     const message = await client.messages.create({
@@ -55,9 +52,8 @@ exports.handler = async (event) => {
       to: formattedPhone,
     });
 
-    console.log(`📱 SMS code sent to ${formattedPhone}: ${code} (SID: ${message.sid})`);
+    console.log(`✅ SMS sent to ${formattedPhone}: ${code}`);
 
-    // Mask phone for response
     const masked = phone.replace(/(.{2})(.*)(.{2})$/, "$1***$3");
 
     return {
@@ -71,11 +67,38 @@ exports.handler = async (event) => {
       }),
     };
   } catch (error) {
-    console.error("❌ SMS error:", error.message, error);
+    console.error("❌ SMS error:", error.message);
     return {
       statusCode: 500,
       headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
       body: JSON.stringify({ success: false, error: error.message || "Failed to send SMS" }),
+    };
+  }
+};
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        success: true,
+        message: "Code sent to phone",
+        masked_phone: masked,
+        codeId: Math.random().toString(36).substring(7),
+      }),
+    };
+  } catch (error) {
+    console.error("❌ SMS error:", error.message, error);
+    return {
+      statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        success: false,
+        error: error.message || "Failed to send SMS",
+      }),
     };
   }
 };
