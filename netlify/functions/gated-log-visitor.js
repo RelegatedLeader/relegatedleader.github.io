@@ -8,7 +8,10 @@ try {
     // Decode base64 private key if provided
     let privateKey = process.env.FIREBASE_PRIVATE_KEY;
     if (process.env.FIREBASE_PRIVATE_KEY_BASE64) {
-      privateKey = Buffer.from(process.env.FIREBASE_PRIVATE_KEY_BASE64, "base64").toString("utf-8");
+      privateKey = Buffer.from(
+        process.env.FIREBASE_PRIVATE_KEY_BASE64,
+        "base64",
+      ).toString("utf-8");
     }
 
     firebaseApp = admin.initializeApp({
