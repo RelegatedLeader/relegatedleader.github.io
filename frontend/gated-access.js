@@ -40,47 +40,26 @@ class GatedAccessManager {
         <div class="gated-modal-content">
           <button class="gated-modal-close" onclick="gatedAccessManager.closeModal()">×</button>
           
-          <h2>Access Required</h2>
-          <p>Enter your email or phone number to receive an access code.</p>
-          
-          <div id="access-tabs" class="gated-tabs">
-            <button class="gated-tab-btn active" onclick="gatedAccessManager.switchTab('email')">📧 Email</button>
-            <button class="gated-tab-btn" onclick="gatedAccessManager.switchTab('phone')">📱 Phone</button>
-          </div>
-
-          <!-- Email Tab -->
+          <!-- Email Tab Only -->
           <div id="email-tab" class="gated-tab-content active">
+            <div class="gated-modal-icon">🔐</div>
             <input 
               type="email" 
               id="email-input" 
-              placeholder="your@email.com"
+              placeholder="Enter your email"
               class="gated-input"
+              autocomplete="email"
             />
             <button 
               class="gated-btn" 
               onclick="gatedAccessManager.sendEmailCode()"
-            >Send Code via Email</button>
+            >Get Access</button>
             <p id="email-status" class="gated-status"></p>
-          </div>
-
-          <!-- Phone Tab -->
-          <div id="phone-tab" class="gated-tab-content">
-            <input 
-              type="tel" 
-              id="phone-input" 
-              placeholder="+1 (555) 000-0000"
-              class="gated-input"
-            />
-            <button 
-              class="gated-btn" 
-              onclick="gatedAccessManager.sendPhoneCode()"
-            >Send Code via SMS</button>
-            <p id="phone-status" class="gated-status"></p>
           </div>
 
           <!-- Code Verification -->
           <div id="verify-section" class="gated-verify-section" style="display: none;">
-            <h3>Enter Your Code</h3>
+            <div class="gated-modal-icon">✓</div>
             <p id="verify-contact"></p>
             <input 
               type="text" 
@@ -88,6 +67,7 @@ class GatedAccessManager {
               placeholder="000000"
               class="gated-input gated-code-input"
               maxlength="6"
+              inputmode="numeric"
             />
             <button 
               class="gated-btn" 
@@ -118,71 +98,86 @@ class GatedAccessManager {
           left: 0;
           width: 100%;
           height: 100%;
-          background: rgba(0, 0, 0, 0.7);
+          background: #000000;
           display: flex;
           justify-content: center;
           align-items: center;
           z-index: 10000;
+          animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes glow {
+          0%, 100% {
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.5),
+                        0 0 40px rgba(0, 150, 255, 0.3),
+                        inset 0 0 20px rgba(0, 200, 255, 0.1);
+          }
+          50% {
+            box-shadow: 0 0 30px rgba(0, 200, 255, 0.8),
+                        0 0 60px rgba(0, 150, 255, 0.5),
+                        inset 0 0 30px rgba(0, 200, 255, 0.2);
+          }
         }
 
         .gated-modal-content {
-          background: white;
-          padding: 40px;
-          border-radius: 12px;
-          max-width: 400px;
+          background: #0a0a0a;
+          padding: 50px;
+          border-radius: 20px;
+          max-width: 420px;
           width: 90%;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
           position: relative;
+          border: 2px solid rgba(0, 200, 255, 0.3);
+          animation: glow 3s ease-in-out infinite, slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(40px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         .gated-modal-close {
           position: absolute;
-          top: 10px;
-          right: 15px;
+          top: 15px;
+          right: 20px;
           background: none;
           border: none;
-          font-size: 28px;
+          font-size: 32px;
           cursor: pointer;
-          color: #999;
+          color: rgba(0, 200, 255, 0.6);
+          transition: all 0.3s;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .gated-modal-close:hover {
-          color: #333;
+          color: rgba(0, 200, 255, 1);
+          transform: rotate(90deg) scale(1.1);
         }
 
-        h2 {
-          margin: 0 0 10px 0;
-          color: #333;
+        .gated-modal-icon {
+          font-size: 48px;
+          text-align: center;
+          margin-bottom: 30px;
+          animation: float 3s ease-in-out infinite;
         }
 
-        p {
-          color: #666;
-          font-size: 14px;
-          margin: 0 0 20px 0;
-        }
-
-        .gated-tabs {
-          display: flex;
-          gap: 10px;
-          margin-bottom: 20px;
-          border-bottom: 2px solid #eee;
-        }
-
-        .gated-tab-btn {
-          flex: 1;
-          padding: 10px;
-          background: none;
-          border: none;
-          border-bottom: 3px solid transparent;
-          cursor: pointer;
-          font-size: 14px;
-          color: #999;
-          transition: all 0.3s;
-        }
-
-        .gated-tab-btn.active {
-          color: #007bff;
-          border-bottom-color: #007bff;
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-15px); }
         }
 
         .gated-tab-content {
@@ -195,128 +190,129 @@ class GatedAccessManager {
 
         .gated-input {
           width: 100%;
-          padding: 12px;
-          margin-bottom: 15px;
-          border: 1px solid #ddd;
-          border-radius: 6px;
-          font-size: 14px;
+          padding: 14px;
+          margin-bottom: 20px;
+          background: rgba(0, 200, 255, 0.05);
+          border: 2px solid rgba(0, 200, 255, 0.3);
+          border-radius: 10px;
+          font-size: 16px;
           box-sizing: border-box;
+          color: #ffffff;
+          transition: all 0.3s;
+          font-family: inherit;
+        }
+
+        .gated-input::placeholder {
+          color: rgba(255, 255, 255, 0.5);
         }
 
         .gated-input:focus {
           outline: none;
-          border-color: #007bff;
-          box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+          background: rgba(0, 200, 255, 0.1);
+          border-color: rgba(0, 200, 255, 0.8);
+          box-shadow: 0 0 20px rgba(0, 200, 255, 0.4),
+                      inset 0 0 10px rgba(0, 200, 255, 0.1);
         }
 
         .gated-code-input {
-          font-size: 24px;
-          letter-spacing: 8px;
+          font-size: 32px;
+          letter-spacing: 12px;
           text-align: center;
           font-weight: bold;
+          font-family: 'Courier New', monospace;
         }
 
         .gated-btn {
           width: 100%;
-          padding: 12px;
-          background: #007bff;
+          padding: 14px;
+          background: linear-gradient(135deg, rgba(0, 200, 255, 0.8), rgba(0, 150, 255, 0.8));
           color: white;
-          border: none;
-          border-radius: 6px;
-          font-size: 14px;
+          border: 2px solid rgba(0, 200, 255, 0.6);
+          border-radius: 10px;
+          font-size: 16px;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.3s;
-          margin-bottom: 10px;
+          margin-bottom: 12px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
         }
 
         .gated-btn:hover {
-          background: #0056b3;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+          background: linear-gradient(135deg, rgba(0, 200, 255, 1), rgba(0, 150, 255, 1));
+          transform: translateY(-3px);
+          box-shadow: 0 0 25px rgba(0, 200, 255, 0.6),
+                      0 8px 20px rgba(0, 200, 255, 0.3);
         }
 
         .gated-btn:active {
-          transform: translateY(0);
+          transform: translateY(-1px);
         }
 
         .gated-btn-secondary {
-          background: #6c757d;
+          background: rgba(100, 100, 100, 0.6);
+          border-color: rgba(100, 100, 100, 0.8);
         }
 
         .gated-btn-secondary:hover {
-          background: #5a6268;
+          background: rgba(100, 100, 100, 0.8);
+          box-shadow: 0 0 20px rgba(100, 100, 100, 0.4);
         }
 
         .gated-status {
           font-size: 13px;
-          padding: 10px;
-          border-radius: 4px;
-          margin: 10px 0 0 0;
+          padding: 12px;
+          border-radius: 8px;
+          margin: 12px 0 0 0;
+          text-align: center;
+          animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         .gated-status.success {
-          background: #d4edda;
-          color: #155724;
-          border: 1px solid #c3e6cb;
+          background: rgba(76, 175, 80, 0.2);
+          color: #4caf50;
+          border: 1px solid rgba(76, 175, 80, 0.5);
         }
 
         .gated-status.error {
-          background: #f8d7da;
-          color: #721c24;
-          border: 1px solid #f5c6cb;
+          background: rgba(244, 67, 54, 0.2);
+          color: #f44336;
+          border: 1px solid rgba(244, 67, 54, 0.5);
         }
 
         .gated-status.info {
-          background: #d1ecf1;
-          color: #0c5460;
-          border: 1px solid #bee5eb;
+          background: rgba(0, 200, 255, 0.2);
+          color: #00c8ff;
+          border: 1px solid rgba(0, 200, 255, 0.5);
         }
 
         .gated-verify-section {
-          margin-top: 20px;
-          padding-top: 20px;
-          border-top: 1px solid #eee;
-        }
-
-        .gated-verify-section h3 {
-          margin: 0 0 5px 0;
-          font-size: 16px;
-          color: #333;
+          margin-top: 0;
+          padding-top: 0;
+          border-top: none;
         }
 
         #verify-contact {
-          font-size: 12px;
-          color: #999;
-          margin-bottom: 15px;
-        }
-
-        .gated-privacy-notice {
-          font-size: 12px !important;
-          color: #999 !important;
+          font-size: 13px;
+          color: rgba(255, 255, 255, 0.7);
+          margin-bottom: 20px;
           text-align: center;
-          margin-top: 20px !important;
-          padding-top: 15px;
-          border-top: 1px solid #eee;
         }
       </style>
     `;
 
     document.head.insertAdjacentHTML("beforeend", styles);
-  }
-
-  switchTab(tab) {
-    // Update buttons
-    document.querySelectorAll(".gated-tab-btn").forEach((btn) => {
-      btn.classList.remove("active");
-    });
-    event.target.classList.add("active");
-
-    // Update content
-    document.querySelectorAll(".gated-tab-content").forEach((content) => {
-      content.classList.remove("active");
-    });
-    document.getElementById(`${tab}-tab`).classList.add("active");
   }
 
   async sendEmailCode() {
@@ -359,47 +355,14 @@ class GatedAccessManager {
   }
 
   async sendPhoneCode() {
-    const phone = document.getElementById("phone-input").value.trim();
-    const statusEl = document.getElementById("phone-status");
-
-    if (!phone) {
-      this.setStatus(statusEl, "Please enter a phone number", "error");
-      return;
-    }
-
-    try {
-      this.setStatus(statusEl, "Sending...", "info");
-      const response = await fetch("/.netlify/functions/gated-send-code-sms", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, site: this.siteId }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        this.setStatus(
-          statusEl,
-          `Code sent to ${data.masked_phone}`,
-          "success",
-        );
-        this.currentContact = phone;
-        this.currentContactType = "sms";
-        setTimeout(() => this.showVerifySection(), 1000);
-      } else {
-        this.setStatus(statusEl, data.error || "Failed to send code", "error");
-      }
-    } catch (error) {
-      this.setStatus(statusEl, "Network error: " + error.message, "error");
-    }
+    // Phone option removed - email only
   }
 
   showVerifySection() {
     document.getElementById("email-tab").classList.remove("active");
-    document.getElementById("phone-tab").classList.remove("active");
     document.getElementById("verify-section").style.display = "block";
     document.getElementById("verify-contact").textContent =
-      `Sent to: ${this.currentContact}`;
+      `Code sent to ${this.currentContact}`;
     document.getElementById("code-input").focus();
   }
 
@@ -471,7 +434,7 @@ class GatedAccessManager {
     document.getElementById("email-tab").classList.add("active");
     document.getElementById("verify-section").style.display = "none";
     document.getElementById("email-input").value = "";
-    document.getElementById("phone-input").value = "";
+    document.getElementById("code-input").value = "";
   }
 
   showExpiringWarning(timeLeft) {
