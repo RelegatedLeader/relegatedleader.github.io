@@ -1,6 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
+    <!-- Redirect to Netlify gated site for protected pages -->
+    <script>
+      const path = window.location.pathname;
+      const protectedPages = [
+        "plasmic.html",
+        "cubix.html",
+        "fallen-futuristics.html",
+        "atlas.html",
+        "la-vie.html",
+      ];
+      if (protectedPages.some((page) => path.includes(page))) {
+        const page = protectedPages.find((p) => path.includes(p));
+        window.location.href = `https://relegatedleader1.netlify.app/${page}`;
+      }
+    </script>
+
     <!-- imports js -->
     <script type="text/javascript" src="scripts/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="scripts/jquery-ui.js"></script>

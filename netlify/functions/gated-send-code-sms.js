@@ -1,10 +1,10 @@
 // Netlify Function - Send SMS Code
-const twilio = require('twilio');
+const twilio = require("twilio");
 
 // Initialize Twilio client
 const client = twilio(
   process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
+  process.env.TWILIO_AUTH_TOKEN,
 );
 
 exports.handler = async (event) => {
@@ -41,7 +41,7 @@ exports.handler = async (event) => {
     await client.messages.create({
       body: `🔐 Your Relegated Leader access code: ${code}\n\nExpires in 15 minutes.`,
       from: process.env.TWILIO_PHONE_NUMBER,
-      to: phone
+      to: phone,
     });
 
     console.log(`📱 SMS code sent to ${phone}: ${code}`);
@@ -59,7 +59,7 @@ exports.handler = async (event) => {
       }),
     };
   } catch (error) {
-    console.error('SMS error:', error);
+    console.error("SMS error:", error);
     return {
       statusCode: 500,
       headers: {

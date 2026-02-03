@@ -1,13 +1,13 @@
 // Netlify Function - Send Email Code
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 // Initialize email transporter
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_FROM,
-    pass: process.env.EMAIL_PASSWORD
-  }
+    pass: process.env.EMAIL_PASSWORD,
+  },
 });
 
 exports.handler = async (event) => {
@@ -44,7 +44,7 @@ exports.handler = async (event) => {
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: email,
-      subject: '🔐 Your Relegated Leader Access Code',
+      subject: "🔐 Your Relegated Leader Access Code",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto;">
           <h2 style="color: #00d4ff;">🔐 Access Code</h2>
@@ -55,7 +55,7 @@ exports.handler = async (event) => {
           <p>This code expires in <strong>15 minutes</strong>.</p>
           <p style="color: #999; font-size: 12px;">From Relegated Leader</p>
         </div>
-      `
+      `,
     });
 
     console.log(`📧 Email code sent to ${email}: ${code}`);
@@ -73,7 +73,7 @@ exports.handler = async (event) => {
       }),
     };
   } catch (error) {
-    console.error('Email error:', error);
+    console.error("Email error:", error);
     return {
       statusCode: 500,
       headers: {
