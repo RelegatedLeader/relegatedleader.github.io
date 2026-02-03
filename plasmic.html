@@ -173,11 +173,10 @@
     <!-- Gated Access System -->
     <script src="/frontend/gated-access.js"></script>
     <script>
-      function startAccess() {
-        document.getElementById("loading").innerHTML =
-          '<span class="loading"></span>';
-        initGatedAccess("plasmic");
-      }
+      // Initialize gating on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        initGatedAccess('plasmic');
+      });
     </script>
   </body>
 </html>

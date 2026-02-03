@@ -147,5 +147,9 @@
     </div>
 
     <script src="/frontend/gated-access.js"></script>
-  </body>
-</html>
+    <script>
+      // Initialize gating on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        initGatedAccess('la-vie');
+      });
+    </script>
