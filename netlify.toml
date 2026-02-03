@@ -12,21 +12,25 @@
   from = "/api/gated/send-code-email"
   to = "/.netlify/functions/gated-send-code-email"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/api/gated/send-code-sms"
   to = "/.netlify/functions/gated-send-code-sms"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/api/gated/verify-code"
   to = "/.netlify/functions/gated-verify-code"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/api/gated/check-session/*"
   to = "/.netlify/functions/gated-check-session"
   status = 200
+  force = true
 
 # Environment settings
 [context.production]

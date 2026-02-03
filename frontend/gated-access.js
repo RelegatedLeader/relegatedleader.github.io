@@ -341,7 +341,7 @@ class GatedAccessManager {
 
     try {
       this.setStatus(statusEl, "Sending...", "info");
-      const response = await fetch("/api/gated/send-code-email", {
+      const response = await fetch("/.netlify/functions/gated-send-code-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, site: this.siteId }),
@@ -362,7 +362,7 @@ class GatedAccessManager {
         this.setStatus(statusEl, data.error || "Failed to send code", "error");
       }
     } catch (error) {
-      this.setStatus(statusEl, "Network error", "error");
+      this.setStatus(statusEl, "Network error: " + error.message, "error");
     }
   }
 
@@ -377,7 +377,7 @@ class GatedAccessManager {
 
     try {
       this.setStatus(statusEl, "Sending...", "info");
-      const response = await fetch("/api/gated/send-code-sms", {
+      const response = await fetch("/.netlify/functions/gated-send-code-sms", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone, site: this.siteId }),
@@ -398,7 +398,7 @@ class GatedAccessManager {
         this.setStatus(statusEl, data.error || "Failed to send code", "error");
       }
     } catch (error) {
-      this.setStatus(statusEl, "Network error", "error");
+      this.setStatus(statusEl, "Network error: " + error.message, "error");
     }
   }
 
