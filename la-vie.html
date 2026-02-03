@@ -23,31 +23,21 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           "Helvetica Neue", Arial, sans-serif;
-        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        background: #000000;
         min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
       }
-
-      .container {
-        background: #1a1f3a;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        padding: 60px;
-        max-width: 600px;
-        width: 100%;
-        text-align: center;
-      }
-
-      h1 {
-        color: #fa709a;
-        font-size: 40px;
-        margin-bottom: 20px;
-      }
-
-      .logo {
+    </style>
+  </head>
+  <body>
+    <script src="/frontend/gated-access.js"></script>
+    <script>
+      // Initialize gating on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        initGatedAccess("la-vie");
+      });
+    </script>
+  </body>
+</html>
         font-size: 80px;
         margin-bottom: 20px;
       }
