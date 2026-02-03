@@ -442,15 +442,29 @@ class GatedAccessManager {
       const data = await response.json();
 
       if (response.ok) {
-        // Store token and expiry
-        localStorage.setItem(`gated_token_${this.siteId}`, data.token);
-        localStorage.setItem(
-          `gated_expires_${this.siteId}`,
-          Date.now() + data.expires_in * 1000,
-        );
+        // Check if user is admin
+        if (data.is_admin) {
+          this.setStatus(
+            statusEl,
+            "✓ Admin access detected! Redirecting to secret panel...",
+            "success",
+          );
+          // Redirect to secret admin panel
+          setTimeout(
+            () => (window.location.href = "/admin-secret-panel.html"),
+            1500,
+          );
+        } else {
+          // Store token and expiry for regular user
+          localStorage.setItem(`gated_token_${this.siteId}`, data.token);
+          localStorage.setItem(
+            `gated_expires_${this.siteId}`,
+            Date.now() + data.expires_in * 1000,
+          );
 
-        this.setStatus(statusEl, "✓ Access granted! Reloading...", "success");
-        setTimeout(() => location.reload(), 1500);
+          this.setStatus(statusEl, "✓ Access granted! Reloading...", "success");
+          setTimeout(() => location.reload(), 1500);
+        }
       } else {
         this.setStatus(statusEl, data.error || "Invalid code", "error");
       }
