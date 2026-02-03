@@ -8,41 +8,30 @@ class GatedAccessManager {
 
   async checkAccess() {
     // If no token, show gating modal
-    if (!this.token) {
+    if (!this.token || !this.expiresAt) {
       this.showGatingModal();
       return false;
     }
 
-    // Verify token is still valid
-    try {
-      const response = await fetch(
-        `/api/gated/check-session/${this.token}/${this.siteId}`,
-      );
-      const data = await response.json();
+    // Check if token is expired (client-side check)
+    const expiresAtTime = parseInt(this.expiresAt);
+    const now = Date.now();
 
-      if (data.valid) {
-        // Check if close to expiring (less than 2 mins)
-        const now = Date.now();
-        const expiresAtTime = parseInt(this.expiresAt);
-        const timeLeft = expiresAtTime - now;
-
-        if (timeLeft < 2 * 60 * 1000) {
-          this.showExpiringWarning(timeLeft);
-        }
-
-        return true;
-      } else {
-        // Token invalid or expired
-        localStorage.removeItem(`gated_token_${this.siteId}`);
-        localStorage.removeItem(`gated_expires_${this.siteId}`);
-        this.showGatingModal();
-        return false;
-      }
-    } catch (error) {
-      console.error("Session check failed:", error);
+    if (now > expiresAtTime) {
+      // Token expired
+      localStorage.removeItem(`gated_token_${this.siteId}`);
+      localStorage.removeItem(`gated_expires_${this.siteId}`);
       this.showGatingModal();
       return false;
     }
+
+    // Token still valid - check time remaining
+    const timeLeft = expiresAtTime - now;
+    if (timeLeft < 2 * 60 * 1000) {
+      this.showExpiringWarning(timeLeft);
+    }
+
+    return true;
   }
 
   showGatingModal() {
@@ -341,11 +330,14 @@ class GatedAccessManager {
 
     try {
       this.setStatus(statusEl, "Sending...", "info");
-      const response = await fetch("/.netlify/functions/gated-send-code-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, site: this.siteId }),
-      });
+      const response = await fetch(
+        "/.netlify/functions/gated-send-code-email",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, site: this.siteId }),
+        },
+      );
 
       const data = await response.json();
 
@@ -422,7 +414,7 @@ class GatedAccessManager {
 
     try {
       this.setStatus(statusEl, "Verifying...", "info");
-      const response = await fetch("/api/gated/verify-code", {
+      const response = await fetch("/.netlify/functions/gated-verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -434,35 +426,44 @@ class GatedAccessManager {
 
       const data = await response.json();
 
-      if (response.ok) {
-        // Check if user is admin
-        if (data.is_admin) {
-          this.setStatus(
-            statusEl,
-            "✓ Admin access detected! Redirecting to secret panel...",
-            "success",
-          );
-          // Redirect to secret admin panel
-          setTimeout(
-            () => (window.location.href = "/admin-secret-panel.html"),
-            1500,
-          );
-        } else {
-          // Store token and expiry for regular user
-          localStorage.setItem(`gated_token_${this.siteId}`, data.token);
-          localStorage.setItem(
-            `gated_expires_${this.siteId}`,
-            Date.now() + data.expires_in * 1000,
-          );
+      if (response.ok && data.success) {
+        // Store token and expiry for regular user
+        localStorage.setItem(`gated_token_${this.siteId}`, data.token);
+        localStorage.setItem(
+          `gated_expires_${this.siteId}`,
+          Date.now() + data.expires_in * 1000,
+        );
 
-          this.setStatus(statusEl, "✓ Access granted! Reloading...", "success");
+        // Log visitor data to Firebase
+        try {
+          await fetch("/.netlify/functions/gated-log-visitor", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data.visitor),
+          });
+        } catch (logError) {
+          console.warn("Failed to log visitor data:", logError);
+          // Continue anyway - logging failure shouldn't block access
+        }
+
+        this.setStatus(statusEl, "✓ Access granted! Redirecting...", "success");
+
+        // Redirect to the site URL if available
+        if (data.redirectUrl) {
+          setTimeout(() => (window.location.href = data.redirectUrl), 1500);
+        } else {
+          // Fallback: reload current page
           setTimeout(() => location.reload(), 1500);
         }
       } else {
-        this.setStatus(statusEl, data.error || "Invalid code", "error");
+        this.setStatus(
+          statusEl,
+          data.error || "Code verification failed",
+          "error",
+        );
       }
     } catch (error) {
-      this.setStatus(statusEl, "Verification failed", "error");
+      this.setStatus(statusEl, "Network error: " + error.message, "error");
     }
   }
 
