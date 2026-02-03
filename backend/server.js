@@ -18,7 +18,7 @@ app.use(
       "https://relegatedleader.github.io",
     ],
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../")));
@@ -27,11 +27,13 @@ app.use(express.static(path.join(__dirname, "../")));
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const accessRoutes = require("./routes/access");
+const gatedAccessRoutes = require("./routes/gated-access");
 
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/access", accessRoutes);
+app.use("/api/gated", gatedAccessRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {

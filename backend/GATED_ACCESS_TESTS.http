@@ -1,0 +1,150 @@
+### Gated Access Testing Endpoints
+
+# These endpoints allow you to test the entire gated access flow
+# Base URL: http://localhost:5000
+
+### 1. Send Email Code
+POST http://localhost:5000/api/gated/send-code-email
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "site": "plasmic"
+}
+
+### Response:
+# {
+#   "success": true,
+#   "message": "Code sent to email",
+#   "masked_email": "t***@example.com"
+# }
+
+---
+
+### 2. Send SMS Code
+POST http://localhost:5000/api/gated/send-code-sms
+Content-Type: application/json
+
+{
+  "phone": "+12125551234",
+  "site": "cubix"
+}
+
+### Response:
+# {
+#   "success": true,
+#   "message": "Code sent via SMS",
+#   "masked_phone": "+1212***1234"
+# }
+
+---
+
+### 3. Verify Code (Email)
+# First, get the code from your email, then verify it
+POST http://localhost:5000/api/gated/verify-code
+Content-Type: application/json
+
+{
+  "code": "123456",
+  "contact": "test@example.com",
+  "site": "plasmic"
+}
+
+### Response:
+# {
+#   "success": true,
+#   "token": "hex-token-string",
+#   "expires_in": 1200
+# }
+
+---
+
+### 4. Check Session Validity
+# Replace TOKEN with the token from step 3
+GET http://localhost:5000/api/gated/check-session/TOKEN/plasmic
+
+### Response (valid):
+# {
+#   "valid": true,
+#   "remaining_time": 1180000
+# }
+
+### Response (expired):
+# {
+#   "valid": false,
+#   "error": "Session expired"
+# }
+
+---
+
+### 5. Get All Access Logs
+GET http://localhost:5000/api/gated/access-logs
+
+### Response:
+# [
+#   {
+#     "id": "doc-id",
+#     "code": "123456",
+#     "contact": "test@example.com",
+#     "contact_type": "email",
+#     "site": "plasmic",
+#     "ip_address": "192.168.1.1",
+#     "created_at": "2026-02-03T12:00:00.000Z",
+#     "used": true,
+#     "accessed_at": "2026-02-03T12:01:00.000Z"
+#   }
+# ]
+
+---
+
+## Complete Testing Workflow
+
+### Scenario 1: Test Email Access
+1. POST /send-code-email with test@example.com
+2. Copy code from your email
+3. POST /verify-code with the code
+4. GET /check-session/{token}/plasmic
+5. GET /access-logs (see the entry)
+
+### Scenario 2: Test SMS Access
+1. POST /send-code-sms with your phone number
+2. Copy code from SMS message
+3. POST /verify-code with the code
+4. GET /check-session/{token}/cubix
+5. GET /access-logs (see the entry)
+
+### Scenario 3: Test Expiry
+1. POST /verify-code to get token
+2. Wait 1+ minute
+3. GET /check-session/{token}/plasmic
+4. Remaining time should be less than 1200 seconds
+
+---
+
+## Sites Available for Testing
+- plasmic
+- cubix
+- fallen-futuristics
+- atlas
+- la-vie
+
+---
+
+## Notes
+- All codes expire after 20 minutes (1200 seconds)
+- Session tokens valid for 20 minutes
+- IP address captured automatically
+- Email/Phone can be any format for testing (or use real ones to receive codes)
+- Check Firebase Firestore to see stored data in real-time
+
+---
+
+## Monitoring in VS Code
+
+### Open Terminal
+You can use VS Code's REST Client extension to send these requests:
+1. Install "REST Client" extension
+2. Create a file with .http extension
+3. Copy the requests above
+4. Click "Send Request" above each block
+5. View responses in a new panel

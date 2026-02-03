@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fallen Futuristics - Gated Access</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #0f2027 0%,
+          #203a43 50%,
+          #2c5364 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        padding: 60px;
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+      }
+
+      h1 {
+        color: #0f2027;
+        font-size: 40px;
+        margin-bottom: 20px;
+      }
+
+      .logo {
+        font-size: 80px;
+        margin-bottom: 20px;
+      }
+
+      p {
+        color: #666;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+      }
+
+      .feature-list {
+        text-align: left;
+        background: #e8f4f8;
+        padding: 20px;
+        border-radius: 12px;
+        margin: 30px 0;
+      }
+
+      .feature-list li {
+        list-style: none;
+        padding: 10px 0;
+        color: #333;
+      }
+
+      .feature-list li:before {
+        content: "⚡ ";
+        color: #0f2027;
+        font-weight: bold;
+        margin-right: 10px;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 15px 40px;
+        background: #0f2027;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 20px;
+      }
+
+      .btn:hover {
+        background: #2c5364;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(15, 32, 39, 0.3);
+      }
+
+      .disclaimer {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        font-size: 12px;
+        color: #999;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 40px 30px;
+        }
+
+        h1 {
+          font-size: 28px;
+        }
+
+        .logo {
+          font-size: 60px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">🚀</div>
+      <h1>Fallen Futuristics</h1>
+      <p>Next-generation technology showcase and innovation lab.</p>
+
+      <div class="feature-list">
+        <ul>
+          <li>Cutting-edge tech demos</li>
+          <li>AI/ML integration</li>
+          <li>Quantum computing concepts</li>
+          <li>Neural interfaces</li>
+          <li>Future-proof architecture</li>
+        </ul>
+      </div>
+
+      <p style="font-size: 14px; color: #999">
+        Please complete verification to access this site for 20 minutes.
+      </p>
+
+      <button class="btn" onclick="initGatedAccess('fallen-futuristics')">
+        Get Access
+      </button>
+
+      <div class="disclaimer">
+        We collect your email or phone and IP address for access tracking and
+        analytics.
+      </div>
+    </div>
+
+    <script src="/frontend/gated-access.js"></script>
+  </body>
+</html>
