@@ -38,8 +38,6 @@ class GatedAccessManager {
     const modal = `
       <div id="gated-access-modal" class="gated-modal-overlay">
         <div class="gated-modal-content">
-          <button class="gated-modal-close" onclick="gatedAccessManager.closeModal()">×</button>
-          
           <!-- Email Tab Only -->
           <div id="email-tab" class="gated-tab-content active">
             <div class="gated-modal-icon">🔐</div>
@@ -144,28 +142,6 @@ class GatedAccessManager {
             opacity: 1;
             transform: translateY(0);
           }
-        }
-
-        .gated-modal-close {
-          position: absolute;
-          top: 15px;
-          right: 20px;
-          background: none;
-          border: none;
-          font-size: 32px;
-          cursor: pointer;
-          color: rgba(0, 200, 255, 0.6);
-          transition: all 0.3s;
-          width: 40px;
-          height: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .gated-modal-close:hover {
-          color: rgba(0, 200, 255, 1);
-          transform: rotate(90deg) scale(1.1);
         }
 
         .gated-modal-icon {
