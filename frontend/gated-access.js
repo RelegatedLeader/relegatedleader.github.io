@@ -110,13 +110,6 @@ class GatedAccessManager {
             >Back</button>
             <p id="verify-status" class="gated-status"></p>
           </div>
-
-          <p class="gated-privacy-notice">
-            <small>
-              ⓘ We collect your contact information and IP address to track access. 
-              This data is securely stored and never shared.
-            </small>
-          </p>
         </div>
       </div>
     `;

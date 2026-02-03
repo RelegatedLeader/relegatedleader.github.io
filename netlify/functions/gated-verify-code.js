@@ -15,7 +15,11 @@ exports.handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body || "{}");
-    const { code, contactMethod, contact, siteId } = body;
+    // Support both parameter naming conventions
+    const code = body.code;
+    const contact = body.contact;
+    const contactMethod = body.contactMethod || (body.contact ? (body.contact.includes("@") ? "email" : "sms") : "unknown");
+    const siteId = body.site || body.siteId || "unknown";
 
     if (!code || code.length !== 6 || !/^\d+$/.test(code)) {
       return {
@@ -45,9 +49,8 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         success: true,
         message: "Access verified!",
-        accessToken: accessToken,
-        expiresAt: expiresAt,
-        expiresIn: 20 * 60,
+        token: accessToken,
+        expires_in: 20 * 60,
         visitor: {
           contact: contact,
           contactMethod: contactMethod,

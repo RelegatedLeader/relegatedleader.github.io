@@ -1,12 +1,15 @@
 // Netlify Function - Send Email Code
 const nodemailer = require("nodemailer");
 
-// Initialize email transporter
+// Initialize email transporter with proper Gmail configuration
 const transporter = nodemailer.createTransport({
   service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
-    user: process.env.EMAIL_FROM,
-    pass: process.env.EMAIL_PASSWORD,
+    user: process.env.EMAIL_FROM || "",
+    pass: process.env.EMAIL_PASSWORD || "",
   },
 });
 
@@ -23,25 +26,33 @@ exports.handler = async (event) => {
   }
 
   try {
+    // Check environment variables
+    if (!process.env.EMAIL_FROM || !process.env.EMAIL_PASSWORD) {
+      console.error("Missing email credentials in environment");
+      return {
+        statusCode: 500,
+        headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
+        body: JSON.stringify({ success: false, error: "Email service not configured" }),
+      };
+    }
+
     const body = JSON.parse(event.body || "{}");
-    const { email, siteId } = body;
+    const { email, site } = body;
 
     if (!email) {
       return {
         statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
+        headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
         body: JSON.stringify({ success: false, error: "Email required" }),
       };
     }
 
     // Generate 6-digit code
     const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const siteId = site || "unknown";
 
     // Send email
-    await transporter.sendMail({
+    const info = await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: email,
       subject: "🔐 Your Relegated Leader Access Code",
@@ -58,26 +69,30 @@ exports.handler = async (event) => {
       `,
     });
 
-    console.log(`📧 Email code sent to ${email}: ${code}`);
+    console.log(`📧 Email code sent to ${email}: ${code} (messageId: ${info.messageId})`);
+
+    // Mask email for response
+    const masked = email.replace(/(.{2})(.*)(@.*)/, "$1***$3");
 
     return {
       statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
+      headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
       body: JSON.stringify({
         success: true,
         message: "Code sent to email",
+        masked_email: masked,
         codeId: Math.random().toString(36).substring(7),
       }),
     };
   } catch (error) {
-    console.error("Email error:", error);
+    console.error("❌ Email error:", error.message, error);
     return {
       statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
+      headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" },
+      body: JSON.stringify({ success: false, error: error.message || "Failed to send email" }),
+    };
+  }
+};
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ success: false, error: error.message }),
