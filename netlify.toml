@@ -1,5 +1,5 @@
 [build]
-  command = "echo 'Static site with serverless functions'"
+  command = "npm install --production"
   publish = "."
   functions = "netlify/functions"
 

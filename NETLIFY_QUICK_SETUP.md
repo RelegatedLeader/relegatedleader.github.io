@@ -31,7 +31,7 @@ Go to: https://www.twilio.com/console
 
 Already done:
 
-- TWILIO_ACCOUNT_SID=ACe5039ee820f057d81ceecc65a3fc92ad
+- TWILIO_ACCOUNT_SID=your_account_sid_here
 
 Still need:
 

@@ -52,7 +52,7 @@ FIREBASE_APP_ID=<copy from "Your apps": App ID>
 4. Add to `backend/.env`:
 
 ```env
-TWILIO_ACCOUNT_SID=ACe5039ee820f057d81ceecc65a3fc92ad
+TWILIO_ACCOUNT_SID=<your twilio account sid>
 TWILIO_AUTH_TOKEN=<your auth token>
 TWILIO_PHONE_NUMBER=<your twilio phone>
 ```
@@ -101,7 +101,7 @@ FIREBASE_CLIENT_ID=...
 FIREBASE_DATABASE_URL=https://relegatedleader-54c49.firebaseio.com
 
 # ===== TWILIO CREDENTIALS =====
-TWILIO_ACCOUNT_SID=ACe5039ee820f057d81ceecc65a3fc92ad
+TWILIO_ACCOUNT_SID=<your account sid>
 TWILIO_AUTH_TOKEN=<your token>
 TWILIO_PHONE_NUMBER=<your phone>
 

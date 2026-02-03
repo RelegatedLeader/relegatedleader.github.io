@@ -61,7 +61,7 @@ Your system is **99% ready**. Just follow these steps to get everything working 
 
 You already have:
 
-- `TWILIO_ACCOUNT_SID=ACe5039ee820f057d81ceecc65a3fc92ad`
+- `TWILIO_ACCOUNT_SID=your_twilio_account_sid`
 
 Still need:
 
@@ -112,7 +112,7 @@ FIREBASE_CLIENT_ID=...
 FIREBASE_DATABASE_URL=https://relegatedleader-54c49.firebaseio.com
 
 # ===== TWILIO CREDENTIALS =====
-TWILIO_ACCOUNT_SID=ACe5039ee820f057d81ceecc65a3fc92ad
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
 TWILIO_AUTH_TOKEN=<from console>
 TWILIO_PHONE_NUMBER=<your verified phone>
 

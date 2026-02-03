@@ -12,7 +12,7 @@
 
 - **Encryption Key**: `e3c48e914965fc3b97058f2fc6955e95476d18dc01dfa647b064f693e3e8f95a`
 - **Firebase Account**: Authenticated as frankalfaro105@gmail.com
-- **Twilio Account**: ACe5039ee820f057d81ceecc65a3fc92ad
+- **Twilio Account**: [Stored in Netlify environment]
 
 ### Code Ready ✅
 
@@ -143,7 +143,7 @@ e3c48e914965fc3b97058f2fc6955e95476d18dc01dfa647b064f693e3e8f95a
 **Twilio Account SID** (already set):
 
 ```
-ACe5039ee820f057d81ceecc65a3fc92ad
+[Stored in Netlify environment variables]
 ```
 
 **Firebase Project**:
