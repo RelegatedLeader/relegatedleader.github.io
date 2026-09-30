@@ -131,20 +131,85 @@
     });
   }
 
-  /* ---- contact form -> mail app ---- */
+  /* ---- contact form: sends through FormSubmit, falls back to the mail app ---- */
   var form = document.getElementById("contact-form");
   if (form) {
+    var TO = "frankalfaro105@proton.me";
+    // Paste a free access key from web3forms.com (sent to TO) for guaranteed delivery.
+    var WEB3FORMS_KEY = "";
+    var status = form.querySelector(".form-status");
+    var btn = form.querySelector("button[type=submit]");
+    var say = function (msg, ok) {
+      status.textContent = msg;
+      status.className = "form-status mono " + (ok ? "ok" : "err");
+    };
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var d = new FormData(form);
-      var text = d.get("message") + "\n\n— " + d.get("name") + " (" + d.get("email") + ")";
-      location.href =
-        "mailto:franciscoalfarobusiness@gmail.com?subject=" +
-        encodeURIComponent("Message from " + d.get("name")) +
-        "&body=" +
-        encodeURIComponent(text);
+      if (d.get("_honey")) return; // bot
+      var name = d.get("name"),
+        email = d.get("email"),
+        message = d.get("message");
+      btn.disabled = true;
+      btn.textContent = "Sending…";
+      say("", true);
+      var payload = {
+        name: name,
+        email: email,
+        message: message,
+        subject: "Portfolio message from " + name,
+        _subject: "Portfolio message from " + name,
+        _replyto: email,
+        _template: "table",
+        _captcha: "false",
+      };
+      var url = "https://formsubmit.co/ajax/" + TO;
+      if (WEB3FORMS_KEY) {
+        url = "https://api.web3forms.com/submit";
+        payload.access_key = WEB3FORMS_KEY;
+      }
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      })
+        .then(function (r) {
+          return r.json().then(function (j) {
+            return { ok: r.ok && String(j.success) !== "false", j: j };
+          });
+        })
+        .then(function (res) {
+          if (!res.ok) throw new Error("send failed");
+          form.reset();
+          say("Message sent. I'll reply to " + email + ".", true);
+        })
+        .catch(function () {
+          say("Couldn't send it from here — opening your email app instead.", false);
+          location.href =
+            "mailto:" + TO + "?subject=" + encodeURIComponent("Message from " + name) +
+            "&body=" + encodeURIComponent(message + "\n\n— " + name + " (" + email + ")");
+        })
+        .then(function () {
+          btn.disabled = false;
+          btn.textContent = "Send message";
+        });
     });
   }
+
+  /* ---- copy email ---- */
+  document.querySelectorAll("[data-copy]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      var v = el.getAttribute("data-copy");
+      var done = function () {
+        var old = el.textContent;
+        el.textContent = "Copied";
+        setTimeout(function () {
+          el.textContent = old;
+        }, 1400);
+      };
+      if (navigator.clipboard) navigator.clipboard.writeText(v).then(done, function () {});
+    });
+  });
 
   /* ---- broken images -> quiet placeholder ---- */
   document.querySelectorAll(".tile-media img").forEach(function (img) {
