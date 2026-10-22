@@ -1,0 +1,303 @@
+/* Parker Smith — the other file. Always dark; one cyan signal (Skippy's eyes). */
+body.parker {
+  --bg: #000000;
+  --bg-alt: #05090b;
+  --text: #e8f6fa;
+  --muted: #6f8a92;
+  --line: rgba(127, 230, 255, 0.16);
+  --accent: #7fe6ff;
+  --accent-ink: #001014;
+  --signal: #7fe6ff;
+  background: radial-gradient(ellipse at 70% -10%, rgba(127, 230, 255, 0.09), transparent 55%), #000;
+  color: var(--text);
+}
+body.parker ::selection {
+  background: var(--signal);
+  color: #001014;
+}
+.scan {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 3px);
+}
+
+/* header */
+.p-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: linear-gradient(#000, rgba(0, 0, 0, 0));
+}
+.p-header .wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+}
+.p-mark {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+.p-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.p-status i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 10px var(--signal);
+  animation: p-pulse 2.4s ease-in-out infinite;
+}
+@keyframes p-pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* hero */
+.p-hero {
+  padding-top: clamp(120px, 20vh, 200px);
+  padding-bottom: clamp(48px, 9vh, 96px);
+  position: relative;
+  z-index: 2;
+}
+.p-boot {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 0 32px;
+  color: var(--signal);
+  opacity: 0.75;
+}
+.p-boot span {
+  opacity: 0;
+  animation: p-type 0.5s ease forwards;
+}
+.p-boot span:nth-child(2) {
+  animation-delay: 0.6s;
+}
+.p-boot span:nth-child(3) {
+  animation-delay: 1.2s;
+}
+@keyframes p-type {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.p-hero h1 {
+  font-size: clamp(3.4rem, 13vw, 11rem);
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+}
+.p-hero h1 em {
+  font-style: normal;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--signal);
+}
+.p-lede {
+  max-width: 560px;
+  margin: 32px 0 0;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  color: var(--muted);
+}
+.p-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+/* project */
+.p-project {
+  position: relative;
+  z-index: 2;
+  overflow-x: clip;
+  padding-bottom: clamp(64px, 10vh, 120px);
+}
+.p-tag {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.p-tag .live {
+  color: var(--signal);
+}
+.p-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(32px, 6vw, 96px);
+  align-items: center;
+  padding: clamp(40px, 7vh, 80px) 0;
+}
+.p-bot {
+  position: relative;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.p-halo {
+  position: absolute;
+  top: 18%;
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: radial-gradient(circle, rgba(127, 230, 255, 0.16), transparent 65%);
+}
+.p-halo::before,
+.p-halo::after {
+  content: "";
+  position: absolute;
+  inset: -14%;
+  border-radius: 50%;
+  border: 1px dashed rgba(127, 230, 255, 0.18);
+  animation: p-spin 40s linear infinite;
+}
+.p-halo::after {
+  inset: -30%;
+  border-style: solid;
+  border-color: rgba(127, 230, 255, 0.07);
+  animation-duration: 70s;
+  animation-direction: reverse;
+}
+@keyframes p-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.p-bot img {
+  position: relative;
+  width: min(100%, 380px);
+  animation: p-float 6s ease-in-out infinite;
+  filter: drop-shadow(0 30px 40px rgba(127, 230, 255, 0.12));
+}
+@keyframes p-float {
+  50% {
+    transform: translateY(-12px);
+  }
+}
+.p-bot figcaption {
+  margin-top: 8px;
+}
+.p-copy h2 {
+  font-size: clamp(2.6rem, 6vw, 5rem);
+}
+.p-sub {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--signal);
+  margin: 14px 0 28px;
+}
+.p-copy p {
+  max-width: 620px;
+}
+.p-copy p:not(.p-sub) {
+  color: #b9cdd3;
+}
+.p-copy strong {
+  color: var(--text);
+  font-weight: 600;
+}
+body.parker .btn {
+  border-color: var(--signal);
+  color: var(--signal);
+}
+body.parker .btn.primary {
+  background: var(--signal);
+  color: #001014;
+}
+body.parker .btn:hover {
+  background: var(--text);
+  border-color: var(--text);
+  color: #000;
+}
+
+.p-specs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+.p-spec {
+  padding: 28px clamp(18px, 2vw, 28px) 32px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  transition: background 0.3s ease;
+}
+.p-spec:hover {
+  background: rgba(127, 230, 255, 0.04);
+}
+.p-spec h3 {
+  font-size: 1.15rem;
+  margin: 18px 0 10px;
+}
+.p-spec p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.p-next {
+  position: relative;
+  z-index: 2;
+  padding-bottom: clamp(64px, 10vh, 120px);
+}
+.p-next p {
+  margin: 10px 0 0;
+  font-family: var(--font-mono);
+  font-size: clamp(1.1rem, 2.4vw, 1.6rem);
+  color: var(--muted);
+}
+.p-next p::after {
+  content: "_";
+  color: var(--signal);
+  animation: p-pulse 1s steps(1) infinite;
+}
+.p-foot {
+  position: relative;
+  z-index: 2;
+  border-top-color: var(--line);
+}
+
+@media (max-width: 860px) {
+  .p-grid {
+    grid-template-columns: 1fr;
+  }
+  .p-specs {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .p-specs {
+    grid-template-columns: 1fr;
+  }
+  .p-status {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .p-boot span {
+    opacity: 1;
+  }
+}

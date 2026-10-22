@@ -94,6 +94,49 @@
     });
   }
 
+  /* ---- hold the name for 4s -> Parker Smith ---- */
+  var mark = document.querySelector(".wordmark");
+  if (mark && mark.hasAttribute("data-hold")) {
+    var HOLD = 4000;
+    var holdTimer = null;
+    var held = false;
+    var startHold = function (e) {
+      if (e.button !== undefined && e.button !== 0) return;
+      held = false;
+      mark.classList.add("holding");
+      holdTimer = setTimeout(function () {
+        held = true;
+        mark.classList.remove("holding");
+        body.classList.add("leaving");
+        setTimeout(function () {
+          location.href = mark.getAttribute("data-hold");
+        }, 260);
+      }, HOLD);
+    };
+    var cancelHold = function () {
+      clearTimeout(holdTimer);
+      mark.classList.remove("holding");
+    };
+    mark.addEventListener("pointerdown", startHold);
+    ["pointerup", "pointerleave", "pointercancel"].forEach(function (ev) {
+      mark.addEventListener(ev, cancelHold);
+    });
+    mark.addEventListener("contextmenu", function (e) {
+      e.preventDefault();
+    });
+    // a completed hold must not also count as a click on the link
+    mark.addEventListener(
+      "click",
+      function (e) {
+        if (held) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      },
+      true
+    );
+  }
+
   /* ---- page transitions ---- */
   document.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest("a");
