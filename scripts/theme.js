@@ -100,27 +100,62 @@
     var HOLD = 4000;
     var holdTimer = null;
     var held = false;
-    var startHold = function (e) {
-      if (e.button !== undefined && e.button !== 0) return;
+    var go = function (url) {
+      body.classList.add("leaving");
+      setTimeout(function () {
+        location.href = url;
+      }, 260);
+    };
+    var startHold = function () {
       held = false;
+      clearTimeout(holdTimer);
       mark.classList.add("holding");
       holdTimer = setTimeout(function () {
         held = true;
+        holdTimer = null;
         mark.classList.remove("holding");
-        body.classList.add("leaving");
-        setTimeout(function () {
-          location.href = mark.getAttribute("data-hold");
-        }, 260);
+        go(mark.getAttribute("data-hold"));
       }, HOLD);
     };
     var cancelHold = function () {
+      var wasRunning = holdTimer !== null;
       clearTimeout(holdTimer);
+      holdTimer = null;
       mark.classList.remove("holding");
+      return wasRunning;
     };
-    mark.addEventListener("pointerdown", startHold);
-    ["pointerup", "pointerleave", "pointercancel"].forEach(function (ev) {
-      mark.addEventListener(ev, cancelHold);
+
+    /* touch: take over the press so the browser's long-press link menu
+       never opens; a short tap still goes to the link */
+    var sx = 0,
+      sy = 0;
+    mark.addEventListener(
+      "touchstart",
+      function (e) {
+        if (e.touches.length !== 1) return;
+        e.preventDefault();
+        sx = e.touches[0].clientX;
+        sy = e.touches[0].clientY;
+        startHold();
+      },
+      { passive: false }
+    );
+    mark.addEventListener("touchmove", function (e) {
+      var t = e.touches[0];
+      if (Math.abs(t.clientX - sx) > 12 || Math.abs(t.clientY - sy) > 12) cancelHold();
     });
+    mark.addEventListener("touchend", function (e) {
+      e.preventDefault();
+      if (cancelHold() && !held) go(mark.href);
+    });
+    mark.addEventListener("touchcancel", cancelHold);
+
+    /* mouse */
+    mark.addEventListener("mousedown", function (e) {
+      if (e.button === 0) startHold();
+    });
+    mark.addEventListener("mouseup", cancelHold);
+    mark.addEventListener("mouseleave", cancelHold);
     mark.addEventListener("contextmenu", function (e) {
       e.preventDefault();
     });

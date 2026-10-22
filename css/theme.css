@@ -157,6 +157,7 @@ body.has-hero .site-header:not(.solid) {
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
+  -webkit-user-drag: none;
   touch-action: manipulation;
 }
 .wordmark[data-hold]::after {
