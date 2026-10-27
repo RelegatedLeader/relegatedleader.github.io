@@ -94,7 +94,7 @@
     });
   }
 
-  /* ---- hold the name for 4s -> Parker Smith ---- */
+  /* ---- hold the name for 4s -> Parker ---- */
   var mark = document.querySelector(".wordmark");
   if (mark && mark.hasAttribute("data-hold")) {
     var HOLD = 4000;
