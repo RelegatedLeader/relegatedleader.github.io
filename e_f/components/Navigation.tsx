@@ -103,7 +103,7 @@ export default function Navigation() {
           <FaLinkedinIn />
         </a>
         <a
-          href="images/alfaro_francisco_resume.pdf"
+          href="images/Francisco_Alfaro_Resume.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className="text-2xl text-gray-400 hover:text-blue-400 transition-colors"
